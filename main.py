@@ -1,44 +1,72 @@
-#First we will import the os module
-#This will allow us to create file paths across operating systems
 import os
-
-#Module for reading CSV files
 import csv
 
-# Declare file location through pathlib
-path = "/Users/basantagurung/Desktop/Python-Challenge/Resources"
-csvpath = os.path.join(path, "budget_data.csv")
+election_data = os.path.join("election_data.csv")
 
-#set the output of the text file
-text_path = "output.txt"
+#A list to capture the name of candidates
+candidates = []
+
+#A liat to capture the number of votes each candidates receives
+num_votes = []
+
+#A list to capture the percentage of total votes each candidates garners
+percent_votes = []
 
 
-# Set variables
-total_months = 0
-total_revenue = 0
-revenue = []
-previous_revenue = 0
-monthly_change = []
-revenure_change = 0
-greatest_decrease = ["", 9999999]
-greatest_increase = ["", 0]
-revenue_change_list = []
-revenue_average = 0
-
- 
-# Open csv in default read mode with context manager
-with open(csvpath, newline = '') as csvfile:
-    #CSV reader specifies delimiter and variable that holds contents
+#A counter for the total number of voters
+total_votes = 0
+with open(election_data, newline ="") as csvfile:
     csvreader = csv.reader(csvfile)
     
-    print(csvreader)
-    
-    #Read the header row first (skip this step if there is now header)
-    csv_header = next(csvreader)
-    #print(f"CSV Header: n{csv_header}")
-    
-    #Read each row of data after the header
     for row in csvreader:
-        print(row)
+        #Add to our vote-counter
+        total_votes += 1
         
-       
+        ...
+        
+        #If the candidate is not on our list, add his/her name to our list, along with a vote in his/her name.
+        #If he/she is already on our list, we will simply add a vote in his/her name.
+        ...
+        if row[2] not in candidates:
+            candidates.append(row[2])
+            index = candidates.index(row[2])
+            num_votes.append(1)
+            
+        else:
+            index = candidates.index(row[2])
+            num_votes[index] += 1
+            
+            #Add to percent_votes list
+            for votes in num_votes:
+                percentage = (votes/total_votes)* 100
+                percentage = round(percentage)
+                percentage = "%.3f%%" % percentage
+                percent_votes.append(percentage)
+                
+                
+            #Find the winning candidate
+            winner = max(num_votes)
+            index = num_votes.index(winner)
+            winning_candidate = candidates[index]
+            
+            #Displaying results
+            print("Election Results")
+            print(".......................................")
+            print(f"Total Votes: {str(total_votes)}")
+            print(".........................................")
+            for i in range(len(candidates)):
+                print(f"{candidates[i]}: {str(percent_votes[i])} ({str(num_votes[i])})")
+            print("......................................")
+            print(f"Winner: {winning_candidate}")
+            
+        print(".....................................")
+        
+        
+        #Exporting to .txt file
+        output = open("output.txt", "w")
+        line1 = "Election Results"
+        line2 = "........................"
+        line3 = str(f"Total Votes: {str(total_votes)}")
+        line4 = str("................................")
+        
+         
